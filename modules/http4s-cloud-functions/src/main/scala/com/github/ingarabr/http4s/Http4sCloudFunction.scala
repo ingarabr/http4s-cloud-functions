@@ -38,29 +38,30 @@ abstract class Http4sCloudFunction[F[_]: Sync] {
     } yield ()
 
   protected def fromRequest(
+      chunkSize: Int,
       request: HttpRequest
-  ): Either[ParseFailure, Request[F]] = {
-
+  ): Either[ParseFailure, Request[F]] =
     for {
       method <- Method.fromString(request.getMethod)
       uri <- Uri.fromString(request.getUri)
-    } yield Request(
-      method = method,
-      uri = uri,
-      headers = Headers.of(
-        request.getHeaders.asScala
-          .map[Header] {
-            case (k, v) => Header(k, v.asScala.mkString(","))
-          }
-          .toList: _*
-      ),
-      body = fs2.io.readInputStream(
-        fis = blocker.delay(request.getInputStream),
-        chunkSize = 1024,
-        blocker = blocker,
-        closeAfterUse = true
+    } yield {
+      Request(
+        method = method,
+        uri = uri,
+        headers = Headers.of(
+          request.getHeaders.asScala
+            .map[Header] {
+              case (k, v) => Header(k, v.asScala.mkString(","))
+            }
+            .toList: _*
+        ),
+        body = fs2.io.readInputStream(
+          fis = blocker.delay(request.getInputStream),
+          chunkSize = chunkSize,
+          blocker = blocker,
+          closeAfterUse = true
+        )
       )
-    )
-  }
+    }
 
 }
