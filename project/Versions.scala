@@ -1,10 +1,10 @@
 object Versions {
 
-  val defaultScala = "2.13.3"
+  val defaultScala = "2.13.6"
 
-  val http4s = "0.21.14"
+  val http4s = "0.21.25"
 
-  val cloudFunctions = "1.0.3"
+  val cloudFunctions = "1.0.4"
 
   def V = this
 
