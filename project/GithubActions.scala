@@ -1,3 +1,4 @@
+import Versions.V
 import sbt.PluginTrigger.AllRequirements
 import sbt.{AutoPlugin, Def, Plugins}
 import sbtghactions.GenerativeKeys.githubWorkflowPublish

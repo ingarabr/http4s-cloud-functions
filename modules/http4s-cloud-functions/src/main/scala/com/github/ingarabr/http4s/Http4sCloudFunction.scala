@@ -6,6 +6,7 @@ import cats.syntax.functor._
 import cats.syntax.flatMap._
 import com.google.cloud.functions.{HttpRequest, HttpResponse}
 import fs2.io.{readInputStream, writeOutputStream}
+import org.typelevel.ci.CIString
 import org.http4s.{Header, Headers, HttpApp, Method, ParseResult, Request, Response, Uri}
 
 import scala.jdk.CollectionConverters._
@@ -36,7 +37,7 @@ abstract class Http4sCloudFunction[F[_]: Sync] {
           headers = Headers(
             request.getHeaders.asScala.view
               .mapValues(_.asScala.mkString(","))
-              .map { case (k, v) => Header(k, v) }
+              .map { case (k, v) => Header.Raw(CIString(k), v) }
               .toList
           ),
           body = readInputStream(
