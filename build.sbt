@@ -1,7 +1,19 @@
 import Versions.V
 
-ThisBuild / organization := "com.github.ingarabr"
-ThisBuild / scalaVersion := V.defaultScala
+inThisBuild(Seq(
+  organization := "com.github.ingarabr",
+  scalaVersion := V.defaultScala,
+  homepage := Some(url("https://github.com/ingarabr/http4s-cloud-functions")),
+  licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
+  developers := List(
+    Developer(
+      "ingarabr",
+      "Ingar Abrahamsen",
+      "ingar.abrahamasen@gmail.com",
+      url("https://github.com/ingarabr/")
+    )
+  )
+))
 
 lazy val root = (project in file("."))
   .settings(name := "http4s-cloud-functions-root")
