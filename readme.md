@@ -3,10 +3,8 @@
 Use http4s with Google Cloud Functions. It's a simple wrapper around the http4s-dsl. 
 
 ## Usage
-
+You'll find the artifacts in maven central.
 ```
-resolvers += Resolver.bintrayRepo("ingarabr", "oss")
-
 libraryDependency += "com.github.ingarabr" % "http4s-cloud-functions" % "<version>"
 ```
 
