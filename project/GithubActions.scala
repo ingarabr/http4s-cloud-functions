@@ -1,6 +1,8 @@
-import sbt.{AllRequirements, AutoPlugin, Def, Plugins}
+import sbt.PluginTrigger.AllRequirements
+import sbt.{AutoPlugin, Def, Plugins}
+import sbtghactions.GenerativeKeys.githubWorkflowPublish
 import sbtghactions.GenerativePlugin.autoImport._
-import sbtghactions.{GitHubActionsPlugin, RefPredicate}
+import sbtghactions.{GitHubActionsPlugin, RefPredicate, WorkflowStep}
 
 object GithubActions extends AutoPlugin {
 
@@ -17,10 +19,12 @@ object GithubActions extends AutoPlugin {
         WorkflowStep.Sbt(commands = List("mdoc")),
       githubWorkflowPublish := Seq(
         WorkflowStep.Sbt(
-          commands = List("publish"),
+          List("ci-release"),
           env = Map(
-            "BINTRAY_USER" -> "${{ secrets.BINTRAY_USER }}",
-            "BINTRAY_PASS" -> "${{ secrets.BINTRAY_PASS }}"
+            "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+            "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+            "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+            "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
           )
         )
       )
