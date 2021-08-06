@@ -1,7 +1,5 @@
 package com.github.ingarabr.http4s
 
-import cats.effect.Blocker
-
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{Executors, ThreadFactory}
 import scala.concurrent.ExecutionContext
@@ -12,10 +10,9 @@ import scala.util.control.NonFatal
   */
 object CatsExecutionContexts {
 
-  val blocker: Blocker = {
+  val blocker: ExecutionContext = {
     val executor = Executors.newCachedThreadPool(factory("blocking"))
-    val service = exitOnFatal(ExecutionContext.fromExecutorService(executor))
-    Blocker.liftExecutionContext(service)
+    exitOnFatal(ExecutionContext.fromExecutorService(executor))
   }
 
   val compute: ExecutionContext = {
