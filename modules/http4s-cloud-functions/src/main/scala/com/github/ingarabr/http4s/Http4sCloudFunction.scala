@@ -1,6 +1,6 @@
 package com.github.ingarabr.http4s
 
-import cats.effect.{Blocker, ContextShift, Sync}
+import cats.effect.Sync
 import cats.syntax.apply._
 import cats.syntax.functor._
 import cats.syntax.flatMap._
@@ -14,18 +14,14 @@ import scala.jdk.CollectionConverters._
 abstract class Http4sCloudFunction[F[_]: Sync] {
   def routes: HttpApp[F]
 
-  def blocker: Blocker
-
-  implicit def contextShift: ContextShift[F]
-
   protected def toResponse(httpResponse: HttpResponse)(response: Response[F]): F[Unit] =
     for {
-      _ <- blocker.delay {
+      _ <- Sync[F].blocking {
         httpResponse.setStatusCode(response.status.code)
         response.headers.foreach(h => httpResponse.appendHeader(h.name.toString, h.value))
       }
       fos = Sync[F].delay(httpResponse.getOutputStream)
-      _ <- response.body.through(writeOutputStream(fos, blocker)).compile.drain
+      _ <- response.body.through(writeOutputStream(fos)).compile.drain
     } yield ()
 
   protected def fromRequest(chunkSize: Int, request: HttpRequest): ParseResult[Request[F]] =
@@ -41,9 +37,8 @@ abstract class Http4sCloudFunction[F[_]: Sync] {
               .toList
           ),
           body = readInputStream(
-            fis = blocker.delay(request.getInputStream),
+            fis = Sync[F].blocking(request.getInputStream),
             chunkSize = chunkSize,
-            blocker = blocker,
             closeAfterUse = true
           )
         )

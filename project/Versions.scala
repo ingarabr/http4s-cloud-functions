@@ -9,7 +9,7 @@ object Versions {
     val default = scala3
   }
 
-  val http4s = "0.22.0"
+  val http4s = "0.23.0"
 
   val cloudFunctions = "1.0.4"
 

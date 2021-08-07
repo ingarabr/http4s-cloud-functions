@@ -1,14 +1,14 @@
 package com.github.ingarabr.http4s
 
-import cats.effect.{Blocker, ContextShift, IO}
+import cats.effect.unsafe.IORuntime
+import cats.effect.IO
 import com.google.cloud.functions.{HttpFunction, HttpRequest, HttpResponse}
 
 trait Http4sCloudFunctionIOApp extends Http4sCloudFunction[IO] with HttpFunction {
 
   val defaultChunkSize = 1024
 
-  implicit val contextShift: ContextShift[IO] = IO.contextShift(CatsExecutionContexts.compute)
-  val blocker: Blocker = CatsExecutionContexts.blocker
+  implicit val runtime: IORuntime = IORuntime.global
 
   override def service(request: HttpRequest, response: HttpResponse): Unit =
     IO.fromEither(fromRequest(defaultChunkSize, request))
