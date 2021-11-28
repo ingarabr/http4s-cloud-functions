@@ -4,8 +4,10 @@ Use http4s with Google Cloud Functions. It's a simple wrapper around the http4s-
 
 ## Usage
 You'll find the artifacts in maven central.
+
 ```
-libraryDependency += "com.github.ingarabr" % "http4s-cloud-functions" % "<version>"
+libraryDependencies += "com.github.ingarabr" % "http4s-cloud-functions" % "<version>"
 ```
 
 Extend the `Http4sCloudFunctionIOApp` trait and implement the `routes` function. You find a complete example under [docs/example-usage.md](./docs/example-usage.md).
+
