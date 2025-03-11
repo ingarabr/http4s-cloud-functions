@@ -13,6 +13,7 @@ object GithubActions extends AutoPlugin {
 
   override def buildSettings: Seq[Def.Setting[_]] =
     Seq(
+      githubWorkflowJavaVersions := Seq(JavaSpec.temurin("21")),
       githubWorkflowTargetTags ++= Seq("v*"),
       githubWorkflowPublishTargetBranches :=
         Seq(RefPredicate.StartsWith(Ref.Tag("v"))),
